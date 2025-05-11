@@ -191,7 +191,8 @@
                   "name": "Check there is a CapabilityStatement",
                   "description": "Check there is a CapabilityStatement",
                   "details": "Check GET metadata returns a CapabilityStatement.\n Applications SHALL return a resource that describes the functionality of the server end-point.\n https://hl7.org/fhir/R4/http.html#capabilities \n RESTful servers are required to provide this resource on demand. Servers SHALL specify what resource types and operations are supported \n https://hl7.org/fhir/R4/capabilitystatement.html#notes",
-                  "actions": [
+                  "actions": 
+				  [
                     "get-metadata",
                     "metadata-http-200"
                   ]

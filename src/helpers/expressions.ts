@@ -696,7 +696,7 @@ $practitionerIdentifierDistribution := $readIoFile('practitionerIdentifierDistri
                 ,$countResourcesTable
                 ]
     }
-  
+ 
   
     
 
