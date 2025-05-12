@@ -1,0 +1,39 @@
+( 
+/* isPatientBirthDateSearchSupported (Test 287) - 
+ The code first retrieves a single patient's birthdate and ID. Then, it recursively searches all patient records matching that birthdate (across multiple pages if necessary) to see if the initially retrieved patient's ID is present in that list of patients sharing the same birthdate. It will output "true" if a match occurs, or "false" if the patient is not found among those with the same birthdate after checking all relevant pages */
+
+$Patient := $http({
+          'method':'get'
+          ,'headers' : {'content-type': 'application/fhir+json'}
+          ,'url': 'Patient' & '?_count=1' 
+    });
+
+$birthDate  := $Patient.data.entry.resource.birthDate;
+$resourceId := $Patient.data.entry.resource.id;
+
+$searchPatientbySearchParam := function($url)
+{
+  (
+    $relativeUrl := $replace($url, $fhirServer, ''); 
+    $searchResult := $http({
+          'method':'get'
+          ,'headers' : {'content-type': 'application/fhir+json'}
+          ,'url': $relativeUrl 
+    });
+    $nextPage := $searchResult.data.link[relation="next"].url;
+    $resourceId in $searchResult.data.entry.resource.id ? 
+      true & $resourceId & $url
+      :
+      $exists($nextPage) ? 
+        $searchPatientbySearchParam($nextPage)
+        :
+        false
+    )
+};
+
+$testResult := $searchPatientbySearchParam($fhirServer & 'Patient?birthdate=' & $birthDate);
+
+/*Write pass/fail msg based on test results*/
+    $testResult ? $setStatus('passed', 'Passed') : $setStatus('failed', 'Failed')
+
+) 
