@@ -2,6 +2,7 @@ import jsonata from 'jsonata';
 import type { Expression } from 'jsonata';
 import { tzOffset } from './localDateTime';
 
+
 export const getKitTransformer: Expression = jsonata(`
     (
       $actionsMap := actions{
@@ -401,7 +402,15 @@ export const reportRunSettings: Expression = jsonata(`
         }
       ]
     };
-
+    
+     $dqaPatientOfficialId := $readIoFile('officialIdPatientDistribution.json');
+     $officialIdChart := $exists($dqaPatientOfficialId) ? {
+      'id': 'official-ident-chart',
+      'title': 'Patient official Id presence distribution (Test 271)',
+      'type': 'pie',
+      'data': [($dqaPatientOfficialId{officialID: $count($)} ~> $spread()).{'label': $keys($), 'value': *}]
+    };
+	
     $dqaGenderDist := $readIoFile('distributionGender.json');
     $genderChart := $exists($dqaGenderDist) ? {
       'id': 'gender-chart',
@@ -684,10 +693,11 @@ $practitionerIdentifierDistribution := $readIoFile('practitionerIdentifierDistri
                 ,$count($skippedTests.data) > 0 ? $skippedTests
                 ,$runSummary
                 ,$genderChart
-				,$patientIdentifierSystemTable
-				,$practitionerIdentifierSystemTable
-				,$encrIdentChart
-				,$encounterClassTable
+                ,$patientIdentifierSystemTable
+		,$officialIdChart
+		,$practitionerIdentifierSystemTable
+		,$encrIdentChart
+		,$encounterClassTable
                 ,$conditionCodeChart
                 ,$chartEncounterTypeDistribution
                 ,$birthdatesChart

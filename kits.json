@@ -1,5 +1,6 @@
 {
   "actions": [
+   
     {
       "id": "get-metadata",
       "description": "GET /metadata",
@@ -165,15 +166,20 @@
       "description": "Confirm Patient endpoint is available",
       "mapping": "isPatientEndpointAvailable"
     },
-	{
+    {
       "id": "isPractitionerIdentifierEncrypted",
       "description": "(Test 270) - Distribution of Practitioners with encrypted identifier",
       "mapping": "isPractitionerIdentifierEncrypted"
     },
-	{
+  	{
       "id": "isPatientBirthDateSearchSupported",
       "description": "(Test 287) - Validate birthdate search parameter is supported for Patient",
       "mapping": "isPatientBirthDateSearchSupported"
+    },
+    {
+      "id": "doCheckPatientHasOfficialId",
+      "description": "(Test 271) - Patient must have at least one identifier from slices il-id or ppn",
+      "mapping": "doCheckPatientHasOfficialId"
     }
 	
   ],
@@ -248,7 +254,18 @@
                     "extract-identifiers"
                   ]
                 },
-                {
+				{
+                  "id": "test271",
+                  "name": "Patient official Id presence distribution",
+                  "description": "Patient official Id presence distribution",
+                  "details": "Patient must have at least one identifier from slices il-id or ppn",
+                  "actions": [
+                    "sample-wrapper",
+                    "extract-identifiers", 
+					"doCheckPatientHasOfficialId"
+                  ]
+                },
+			    {
                   "id": "test70",
                   "name": "Patient gender distribution",
                   "description": "Patient gender value distribution",
