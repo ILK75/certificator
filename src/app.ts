@@ -142,6 +142,18 @@ const setSkippedTests = async (skippedTests: string[]) => {
 
 const runAction = async (mappingId: string) => {
   // only run action if it did not run already
+  const actionDefinition = kits.actions.find(action => action.mapping === mappingId);
+
+  //const customParameterValue = actionDefinition ? actionDefinition.parameter : undefined;
+  const customParameterValue = actionDefinition ? actionDefinition['parameter'] : undefined;
+
+
+  const fumeMappingInput: { resourceType?: string } = {};
+  if (customParameterValue !== undefined) {
+    fumeMappingInput.resourceType = customParameterValue;
+  }
+  const fumeMappingInputJsonString = JSON.stringify(fumeMappingInput);
+
   const initialStatusJson = await getActionStatus(mappingId);
   let engineResponse: AxiosResponse;
   if (initialStatusJson.statusCode === 'ready') {
@@ -168,7 +180,7 @@ const runAction = async (mappingId: string) => {
 
         // executing the mapping
         $${mappingId}(
-          {}, // empty object as input
+          ${fumeMappingInputJsonString}, // empty object as input
           // binding the $setStatus function to the mapping
           {
             'setStatus': $setStatus

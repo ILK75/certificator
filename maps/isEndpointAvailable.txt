@@ -4,12 +4,7 @@
   $targetResourceType := $.resourceType;
   
   /*Perform test*/
-  /*  $testResult :=    $http({
-          'method':'get'
-          ,'headers' : {'content-type': 'application/fhir+json'}
-          ,'url': 'Patient' & '?_count=1' 
-    }).status = 200; */
-	
+  
   $testResult :=    
     $http({ 
             'method':'get'
@@ -19,5 +14,5 @@
   
   /*Write pass/fail msg based on test results*/
     $testResult ? $setStatus('passed', 'Passed') : $setStatus('failed', 'Failed');
-	$writeFile($targetResourceType,'jus-a-test.json')
+
 )

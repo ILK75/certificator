@@ -164,7 +164,8 @@
 	{
       "id": "isPatientEndpointAvailable",
       "description": "Confirm Patient endpoint is available",
-      "mapping": "isPatientEndpointAvailable"
+      "mapping": "isEndpointAvailable",
+	  "parameter": "Patient"
     },
     {
       "id": "isPractitionerIdentifierEncrypted",
