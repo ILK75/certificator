@@ -171,6 +171,11 @@
       "description": "(Test 270) - Distribution of Practitioners with encrypted identifier",
       "mapping": "isPractitionerIdentifierEncrypted"
     },
+  	{
+      "id": "isPatientBirthDateSearchSupported",
+      "description": "(Test 287) - Validate birthdate search parameter is supported for Patient",
+      "mapping": "isPatientBirthDateSearchSupported"
+    },
     {
       "id": "doCheckPatientHasOfficialId",
       "description": "(Test 271) - Patient must have at least one identifier from slices il-id or ppn",
@@ -478,6 +483,21 @@
                     "sample-wrapper",
                     "doSuccessfulSearch",
                     "isSuccessfulSearchBundleType"
+                  ]
+                }
+              ]
+            },
+			{
+              "id": "search-paramter-support",
+              "name": "Search parameter support",
+              "children": [
+			  {
+                  "id": "test287",
+                  "name": "Validate birthdate search parameter is supported for Patient",
+                  "description": "Validate birthdate search parameter is supported for Patient",
+                  "details": "Validate birthdate search parameter is supported for Patient",
+                  "actions": [
+                   "isPatientBirthDateSearchSupported"
                   ]
                 }
               ]
