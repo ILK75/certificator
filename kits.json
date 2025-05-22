@@ -163,10 +163,11 @@
     },
 	{
       "id": "isPatientEndpointAvailable",
-      "description": "Confirm Patient endpoint is available",
+      "description": "Confirm endpoint is available",
       "mapping": "isEndpointAvailable",
-	  "parameter": "Patient"
+	  "parameters": { "resourceType": "Patient" } 
     },
+	
     {
       "id": "isPractitionerIdentifierEncrypted",
       "description": "(Test 270) - Distribution of Practitioners with encrypted identifier",
@@ -598,6 +599,7 @@
                   "details": "Confirm Patient endpoint is available based on the following logic: GET [base]/[resourceType]?_count=1 SHALL return a valid FHIR search response (a bundle with 1 or fewer resources) with HTTP status = 200",
                   "actions": [
                     "isPatientEndpointAvailable"
+					
                   ]
                 }
               ]

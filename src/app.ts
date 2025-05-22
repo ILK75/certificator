@@ -144,15 +144,11 @@ const runAction = async (mappingId: string) => {
   // only run action if it did not run already
   const actionDefinition = kits.actions.find(action => action.mapping === mappingId);
 
-  //const customParameterValue = actionDefinition ? actionDefinition.parameter : undefined;
-  const customParameterValue = actionDefinition ? actionDefinition['parameter'] : undefined;
+  
 
+ 
 
-  const fumeMappingInput: { resourceType?: string } = {};
-  if (customParameterValue !== undefined) {
-    fumeMappingInput.resourceType = customParameterValue;
-  }
-  const fumeMappingInputJsonString = JSON.stringify(fumeMappingInput);
+  const parametersForFumeScript = (actionDefinition as any).parameters || {}; 
 
   const initialStatusJson = await getActionStatus(mappingId);
   let engineResponse: AxiosResponse;
@@ -160,6 +156,7 @@ const runAction = async (mappingId: string) => {
     await setActionStatus(mappingId, 'init', 'Initialized');
     try {
       console.log(getLocalDateTime(), `Executing action: ${mappingId}`);
+	  const parameters = JSON.stringify(parametersForFumeScript);
       engineResponse = await engineApi.post('/', {
         input: {},
         contentType: 'application/json',
@@ -179,13 +176,17 @@ const runAction = async (mappingId: string) => {
         $setStatus('in-progress','In Progress');
 
         // executing the mapping
-        $${mappingId}(
-          ${fumeMappingInputJsonString}, // empty object as input
-          // binding the $setStatus function to the mapping
-          {
-            'setStatus': $setStatus
-          }
-        ))`
+       $${mappingId}(
+            {}, 
+            $merge
+			(
+			  [
+                {'setStatus': $setStatus},
+                ${parameters} 
+              ]
+			)
+          )
+		)`
       });
       const currentActionStatus = await getActionStatus(mappingId);
       if (currentActionStatus?.statusCode === 'in-progress' || currentActionStatus?.statusCode === 'init') {

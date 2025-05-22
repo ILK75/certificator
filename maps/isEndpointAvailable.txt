@@ -1,19 +1,12 @@
 // isEndpointAvailable - Confirm  endpoint is available based on the following logic:
 // GET [base]/[resourceType]?_count=1 SHALL return a valid FHIR search response (a bundle with 1 or fewer resources) with HTTP status = 200
 (
-  // receives resourceType from the invoking action
-  $targetResourceType := $.resourceType;
-  
-  /*Perform test*/
-  
-  $testResult :=    
+   $testResult :=    
     $http({ 
             'method':'get'
             ,'headers' : {'content-type': 'application/fhir+json'}
-            ,'url': $targetResourceType & '?_count=1' 
+            ,'url': $resourceType & '?_count=1' 
     }).status = 200;
-  
-  /*Write pass/fail msg based on test results*/
-    $testResult ? $setStatus('passed', 'Passed') : $setStatus('failed', 'Failed');
-
+	
+   $testResult ? $setStatus('passed', 'Passed') : $setStatus('failed', 'Failed');
 )
